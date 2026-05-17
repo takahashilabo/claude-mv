@@ -133,6 +133,39 @@ function main() {
   console.log(`  ${srcSessionPath}`);
   console.log(`→ ${destSessionPath}`);
 
+  // Update cwd in all JSONL files
+  const jsonlFiles = fs.readdirSync(destSessionPath).filter(f => f.endsWith('.jsonl'));
+  let updatedCount = 0;
+  for (const file of jsonlFiles) {
+    const filePath = path.join(destSessionPath, file);
+    const lines = fs.readFileSync(filePath, 'utf8').split('\n');
+
+    // Find old cwd from first line that has one
+    let oldCwd = null;
+    for (const line of lines) {
+      if (!line.trim()) continue;
+      try {
+        const obj = JSON.parse(line);
+        if (obj.cwd) { oldCwd = obj.cwd; break; }
+      } catch {}
+    }
+
+    if (!oldCwd || oldCwd === destActualPath) continue;
+
+    const updated = lines.map(line => {
+      if (!line.includes('"cwd"')) return line;
+      try {
+        const obj = JSON.parse(line);
+        if (obj.cwd === oldCwd) { obj.cwd = destActualPath; return JSON.stringify(obj); }
+      } catch {}
+      return line;
+    }).join('\n');
+
+    fs.writeFileSync(filePath, updated, 'utf8');
+    updatedCount++;
+  }
+  if (updatedCount > 0) console.log(`Updated cwd in ${updatedCount} session file(s): ${srcActualPath || '(unknown)'} → ${destActualPath}`);
+
   console.log(`\nTo resume: cd ${destActualPath} && claude, then /resume`)
 }
 
