@@ -9,7 +9,7 @@ When you move or rename a project directory, Claude Code loses track of the conv
 ## Installation
 
 ```bash
-npm install -g claude-mv
+npm install -g github:takahashilabo/claude-mv
 ```
 
 ## Usage
