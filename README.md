@@ -27,14 +27,14 @@ claude-mv ~/projects/old-name ~/projects/new-name
 Output:
 
 ```
-Migrated 2 session(s) from:
+Moved directory:
+  /Users/you/projects/old-name
+→ /Users/you/projects/new-name
+Moved sessions:
   /Users/you/.claude/projects/-Users-you-projects-old-name
-to:
-  /Users/you/.claude/projects/-Users-you-projects-new-name
+→ /Users/you/.claude/projects/-Users-you-projects-new-name
 
-To resume a session, run one of the following:
-  claude --resume 66d3e167-9199-4d33-8fcb-598e4864a98e
-  claude --resume a1b2c3d4-0000-1111-2222-333344445555
+To resume: cd /Users/you/projects/new-name && claude, then /resume
 ```
 
 ## How it works
